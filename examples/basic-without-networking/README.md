@@ -34,7 +34,24 @@ controller_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-con
 compute_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-compute-centos-v2-4-0"
 login_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-login-centos-v2-4-0"
 ```
-Note that you can use [Packer](https://packer.io) to build on top of these images to retain full functionality of the fluid-slurm-gcp deployment while also including your personal/company applications in the images. Additionally, each `partitions[].machines[]` block can specify a unique compute node image. This is helpful for teams that are building application pipelines that can be distributed across Slurm partitions.
+
+For example, you can use our Ubuntu based images
+```
+controller_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-controller-ubuntu-v2-4-0"
+compute_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-compute-ubuntu-v2-4-0"
+login_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-login-ubuntu-v2-4-0"
+```
+
+Or the CentOS-7 + OpenHPC images
+```
+controller_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-controller-ohpc-v2-4-0"
+compute_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-compute-ohpc-v2-4-0"
+login_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-login-ohpc-v2-4-0"
+```
+
+Note that you can also use [Packer](https://packer.io) to build on top of these images to retain full functionality of the fluid-slurm-gcp deployment while also including your personal/company applications in the images. Additionally, each `partitions[].machines[]` block can specify a unique compute node image. This is helpful for teams that are building application pipelines that can be distributed across Slurm partitions. 
+
+Note that the `projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-*` images incur a $0.01 USD/vCPU/hour and $0.09 USD/GPU/hour usage fee to help Fluid Numerics support the [Marketplace solutions](https://console.cloud.google.com/marketplace/details/fluid-cluster-ops/fluid-slurm-gcp?utm_source=github&utm_medium=link&utm_campaign=v240&utm_content=terraform), this repository, and other community driven activities. [See our pricing examples documentation for more details](https://help.fluidnumerics.com/slurm-gcp/pricing)
 
 ### Configuring Partitions
 1. Set the `partitions` list-object
