@@ -116,6 +116,9 @@ resource "google_compute_firewall" "default_ssh_firewall_rules" {
 // Create a list of unique regions from the partitions
 locals {
   regions = distinct(flatten([for p in var.partitions : [for m in p.machines : trimsuffix(m.zone,substr(m.zone,-2,-2))]]))
+  flatRegions = flatten([for p in var.partitions : [for m in p.machines : trimsuffix(m.zone,substr(m.zone,-2,-2))]])
+  flatZones = flatten([for p in var.partitions : [for m in p.machines : m.zone]])
+  regionToZone = zipmap(local.flatRegions,local.flatZones)
 }
 
 // Create any additional shared VPC subnetworks
@@ -125,6 +128,11 @@ resource "google_compute_subnetwork" "shared_vpc_subnetworks" {
   ip_cidr_range = cidrsubnet(var.subnet_cidr, 4, count.index+1) 
   region = local.regions[count.index]
   network = google_compute_network.shared_vpc_network.self_link
+}
+
+// Create a map that takes in zone and returns subnet (for partition creation)
+locals {
+  zoneToSubnet = {for s in google_compute_subnetwork.shared_vpc_subnetworks : local.regionToZone[s.region] => s.self_link}
 }
 
 // Create the home filestore instance
@@ -213,6 +221,7 @@ resource "google_service_networking_connection" "private_vpc_connection" {
   depends_on = [google_project_service.service_networking]
 }
 
+// Create a random suffix - CloudSQL names cannot be reused within 7 days of use
 resource "random_id" "db_name_suffix" {
   byte_length = 4
 }
@@ -244,10 +253,6 @@ locals {
 // *************************************************** //
 
 locals {
-  controller_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-controller-${var.image_flavor}-${var.image_version}"
-  login_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-login-${var.image_flavor}-${var.image_version}"
-  compute_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-compute-${var.image_flavor}-${var.image_version}"
-
   controller = {
     machine_type = var.controller_machine_type
     disk_size_gb = 15
@@ -268,30 +273,58 @@ locals {
     vpc_subnet = google_compute_subnetwork.default_subnet.self_link
     zone = var.primary_zone
   }]
-  
-  partitions = length(var.partitions) != 0 ? var.partitions : [{ name = "basic"
-                                                                 project = var.primary_project
-                                                                 max_time = "8:00:00"
-                                                                 labels = {"slurm-gcp"="compute"}
-                                                                 machines = [{ name = "basic"
-                                                                               disk_size_gb = 15
-                                                                               disk_type = "pd-standard"
-                                                                               disable_hyperthreading = false
-                                                                               external_ip = false
-                                                                               gpu_count = 0
-                                                                               gpu_type = ""
-                                                                               n_local_ssds = 0
-                                                                               image = local.compute_image
-                                                                               local_ssd_mount_directory = "/scratch"
-                                                                               machine_type = "n1-standard-16"
-                                                                               max_node_count = 5
-                                                                               preemptible_bursting = false
-                                                                               static_node_count = 0
-                                                                               vpc_subnet = google_compute_subnetwork.default_subnet.self_link
-                                                                               zone = var.primary_zone
-                                                                            }]
-                                                              }]
 
+  default_partition = [{name = "basic"
+                        project = var.primary_project
+                        max_time = "8:00:00"
+                        labels = {"slurm-gcp"="compute"}
+                        machines = [{ name = "basic"
+                                      disk_size_gb = 15
+                                      disk_type = "pd-standard"
+                                      disable_hyperthreading = false
+                                      external_ip = false
+                                      gpu_count = 0
+                                      gpu_type = ""
+                                      n_local_ssds = 0
+                                      image = var.compute_image
+                                      local_ssd_mount_directory = "/scratch"
+                                      machine_type = "n1-standard-16"
+                                      max_node_count = 5
+                                      preemptible_bursting = false
+                                      static_node_count = 0
+                                      vpc_subnet = google_compute_subnetwork.default_subnet.self_link
+                                      zone = var.primary_zone
+                                   }]
+                        }]
+
+  // Create the draft partitions
+  prePartitions = length(var.partitions) != 0 ? var.partitions : local.default_partition
+  
+  // If the user has provided a partitions list object, they don't have to provide the vpc-subnet, because
+  // this module creates the subnets based on the number of unique regions derived from the partitions.
+  // Instead, they can leave partitions[].machines[].vpc_subnet = "" and this step will use the partition zone
+  // to map it to the VPC subnet
+  partitions = [for p in local.prePartitions : {name = p.name
+                                                project = p.project
+                                                max_time = p.max_time
+                                                labels = p.labels
+                                                machines = [for m in p.machines : {name = m.name
+                                                                                   disk_size_gb = m.disk_size_gb
+                                                                                   disk_type = m.disk_type
+                                                                                   disable_hyperthreading = m.disable_hyperthreading
+                                                                                   external_ip = m.external_ip
+                                                                                   gpu_count = m.gpu_count
+                                                                                   gpu_type = m.gpu_type
+                                                                                   n_local_ssds = m.n_local_ssds
+                                                                                   image = m.image
+                                                                                   local_ssd_mount_directory = m.local_ssd_mount_directory
+                                                                                   machine_type = m.machine_type
+                                                                                   max_node_count = m.max_node_count
+                                                                                   preemptible_bursting = m.preemptible_bursting
+                                                                                   static_node_count = m.static_node_count
+                                                                                   vpc_subnet = m.vpc_subnet != "" ? m.vpc_subnet : local.zoneToSubnet[m.zone]
+                                                                                   zone = m.zone}]}] 
+                                            
 
 
 }
@@ -299,10 +332,10 @@ locals {
 
 // Create the Slurm-GCP cluster
 module "slurm_gcp" {
-  source  = "git::https://source.developers.google.com/p/managed-fluid-slurm-gcp/r/terraform-fluidnumerics-slurm_gcp?ref=v1.0.10"
-  controller_image = local.controller_image
-  compute_image = local.compute_image
-  login_image = local.login_image
+  source  = "../../modules/fluid-slurm-gcp"
+  controller_image = var.controller_image
+  compute_image = var.compute_image
+  login_image = var.login_image
   parent_folder = var.parent_folder
   slurm_gcp_admins = var.slurm_gcp_admins
   slurm_gcp_users = var.slurm_gcp_users

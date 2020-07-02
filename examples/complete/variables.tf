@@ -1,6 +1,5 @@
 variable "parent_folder" {
   type = string
-  default = ""
   description = "A GCP folder id (folders/FOLDER-ID) that contains the Fluid-Slurm-GCP controller project and compute partition projects. This folder setting is useful for multi-project deployments."
 }
 
@@ -60,16 +59,22 @@ variable "managing_domain" {
   default = "fluidnumerics.com"
 }
 
-variable "image_version" {
+variable "controller_image" {
   type = string
-  description = "Image version for the fluid-slurm-gcp images"
-  default = "v2-4-0"
+  description = "Image to use for the fluid-slurm-gcp controller"
+  default = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-controller-centos-v2-4-0"
 }
 
-variable "image_flavor" {
+variable "compute_image" {
   type = string
-  description = "Base Fluid-Slurm-GCP image flavor. One of `centos`, `ohpc`, or `ubuntu`"
-  default = "centos"
+  description = "Image to use for the fluid-slurm-gcp compute instances (all partitions[].machines[])."
+  default = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-compute-centos-v2-4-0"
+}
+
+variable "login_image" {
+  type = string
+  description = "Image to use for the fluid-slurm-gcp login node"
+  default = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-login-centos-v2-4-0"
 }
 
 variable "primary_project" {
