@@ -1,3 +1,7 @@
+project = "PROJECT ID"
+vpc_subnet = "projects/PROJECT ID/regions/REGION/subnetworks/SUBNETWORK"
+zone = "ZONE"
+
 mds_node_count          = 1
 mds_machine_type        = "n1-standard-32"
 mds_boot_disk_type      = "pd-standard"

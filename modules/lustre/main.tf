@@ -1,12 +1,15 @@
-
-
+// Configure the Google Cloud provider
+provider "google" {
+ version = "3.9"
+}
 
 resource "google_compute_disk" "mdt" {
   count = var.mds_node_count
-  name = "${var.cluster_name}-mds${count.index}"
+  name = "${var.cluster_name}-mdt${count.index}"
   type = var.mdt_disk_type
   zone = var.zone
   size = var.mdt_disk_size_gb 
+  project = var.project
 }
 
 resource "google_compute_instance" "mds" {
@@ -55,10 +58,11 @@ resource "google_compute_instance" "mds" {
 // OSS
 resource "google_compute_disk" "ost" {
   count = var.oss_node_count
-  name = "${var.cluster_name}-oss${count.index}"
+  name = "${var.cluster_name}-ost${count.index}"
   type = var.ost_disk_type
   zone = var.zone
   size = var.ost_disk_size_gb 
+  project = var.project
 }
 
 resource "google_compute_instance" "oss" {
