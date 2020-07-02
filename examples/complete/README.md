@@ -8,7 +8,7 @@ This "Complete System" Terraform deployment creates
 * (Optional) Filestore instance for hosting /mnt/share group storage directory
 * Cloud SQL instance for hosting Slurm Database
 * Service Accounts for login, controller, and compute nodes
-* IAM policies on project (default) or parent folder (if `parent_folder` is specified) for system users, administrators, and service accounts. IAM policies use custom roles from Fluid Numerics.
+* IAM policies on a parent folder for system users, administrators, and service accounts (see the [fluid-slurm-gcp module](../../modules/fluid-slurm-gcp/main.tf) for details).
 * Controller and Login Nodes
 
 
@@ -33,11 +33,13 @@ Before using this example, you need
 By default, these settings will use the CentOS-7 v2.4.0 Fluid-Slurm-GCP images for your cluster with a single basic partition in the `primary_zone`. 
 
 ### Changing Image Flavors
-You can change the image flavor by setting image flavor, e.g.,
+If you want to change the default images used to launch the cluster, you can set the following variables
 ```
-image_flavor = ubuntu // Ubuntu 19.10
-image_flavor = ohpc   // CentOS-7 + OpenHPC Packages
+controller_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-controller-centos-v2-4-0"
+compute_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-compute-centos-v2-4-0"
+login_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-login-centos-v2-4-0"
 ```
+Note that you can use [Packer](https://packer.io) to build on top of these images to retain full functionality of the fluid-slurm-gcp deployment while also including your personal/company applications in the images. Additionally, each `partitions[].machines[]` block can specify a unique compute node image. This is helpful for teams that are building application pipelines that can be distributed across Slurm partitions.
 
 ### Configuring Partitions
 1. Set the `partitions` list-object

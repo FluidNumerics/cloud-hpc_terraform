@@ -8,8 +8,7 @@ slurm_gcp_users = ["user:someone@example.com"]
 parent_folder = "folders/FOLDER ID"
 primary_project = "PROJECT ID"
 primary_zone = "ZONE"
-
-//share_size_gb = 2048
+vpc_subnet = "projects/{PROJECT}/regions/{REGION}/subnetworks/{SUBNETWORK}
 
 // If you want to change the default images used to launch the cluster, you can set the self_link here.
 // Note that you can use Packer to build on top of these images to retain full functionality of this
@@ -18,6 +17,7 @@ primary_zone = "ZONE"
 //controller_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-controller-centos-v2-4-0"
 //compute_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-compute-centos-v2-4-0"
 //login_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-login-centos-v2-4-0"
+
 
 // Leave the vpc_subnet blank in the partitions[].machines[] in this example
 // This example creates VPC subnets based on the unique regions the partitions[].machines[]

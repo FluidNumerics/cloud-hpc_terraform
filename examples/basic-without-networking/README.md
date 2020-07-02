@@ -1,9 +1,7 @@
-# Fluid-Slurm-GCP : Basic (with networking)
+# Fluid-Slurm-GCP : Basic (without networking)
 Copyright 2020 Fluid Numerics LLC
 
 This "Complete System" Terraform deployment creates
-* Shared VPC Network with subnetworks for the controller+login and any regions where partitions are deployed.
-* Firewall rules for open internal communication between compute instances in the fluid-slurm-gcp cluster and for access from the outside world via tcp:22 (ssh)
 * Service Accounts for login, controller, and compute nodes
 * IAM policies on a parent folder for system users, administrators, and service accounts (see the [fluid-slurm-gcp module](../../modules/fluid-slurm-gcp/main.tf) for details).
 * Controller and Login Nodes
@@ -16,6 +14,7 @@ Before using this example, you need
 1. A GCP Folder that contains a single GCP Project. See https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy for more details
 2. A service account that has `Project Editor` and `Folder IAM Admin` roles applied at the GCP Folder level.
 3. Credentials on your local system for the service account. Be sure to set `export GOOGLE_APPLICATION_CREDENTIALS=/path/to/credentials.json` on your local system
+4. VPC Network with subnetworks and firewall rules predefined
 
 ### How-to
 1. Set the `cluster_name` to the desired name. This name will prefix the login and controller node names in addition to the Filestore instances, Cloud SQL instance, Network and Subnetworks, and Firewall Rules.
