@@ -1,16 +1,12 @@
-# Fluid-Slurm-GCP : Complete System
+# Fluid-Slurm-GCP : Basic (with networking)
 Copyright 2020 Fluid Numerics LLC
 
 This "Complete System" Terraform deployment creates
 * Shared VPC Network with subnetworks for the controller+login and any regions where partitions are deployed.
 * Firewall rules for open internal communication between compute instances in the fluid-slurm-gcp cluster and for access from the outside world via tcp:22 (ssh)
-* Filestore instance for hosting /home
-* (Optional) Filestore instance for hosting /mnt/share group storage directory
-* Cloud SQL instance for hosting Slurm Database
 * Service Accounts for login, controller, and compute nodes
 * IAM policies on project (default) or parent folder (if `parent_folder` is specified) for system users, administrators, and service accounts. IAM policies use custom roles from Fluid Numerics.
 * Controller and Login Nodes
-
 
 
 ## Getting Started

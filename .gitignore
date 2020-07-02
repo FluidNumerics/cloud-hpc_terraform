@@ -1,3 +1,4 @@
 *.auto.tfvars
 tfplan
 *.tfstate*
+.terraform
