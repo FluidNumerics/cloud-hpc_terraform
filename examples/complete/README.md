@@ -57,6 +57,8 @@ login_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-login-oh
 Note that you can also use [Packer](https://packer.io) to build on top of these images to retain full functionality of the fluid-slurm-gcp deployment while also including your personal/company applications in the images. Additionally, each `partitions[].machines[]` block can specify a unique compute node image. This is helpful for teams that are building application pipelines that can be distributed across Slurm partitions. 
 
 Note that the `projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-*` images incur a $0.01 USD/vCPU/hour and $0.09 USD/GPU/hour usage fee to help Fluid Numerics support the [Marketplace solutions](https://console.cloud.google.com/marketplace/details/fluid-cluster-ops/fluid-slurm-gcp?utm_source=github&utm_medium=link&utm_campaign=v240&utm_content=terraform), this repository, and other community driven activities. [See our pricing examples documentation for more details](https://help.fluidnumerics.com/slurm-gcp/pricing)
+Additionally, use of these images is subject to the [End-User-License Agreement for the fluid-slurm-gcp images](https://help.fluidnumerics.com/slurm-gcp/eula)
+
 ### Configuring Partitions
 1. Set the `partitions` list-object
 2. Terraform plan then apply
