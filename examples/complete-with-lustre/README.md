@@ -1,4 +1,4 @@
-# Fluid-Slurm-GCP : Complete System
+# Fluid-Slurm-GCP : Complete System with Lustre
 Copyright 2020 Fluid Numerics LLC
 
 This "Complete System" Terraform deployment creates
@@ -7,6 +7,7 @@ This "Complete System" Terraform deployment creates
 * Filestore instance for hosting /home
 * (Optional) Filestore instance for hosting /mnt/share group storage directory
 * Cloud SQL instance for hosting Slurm Database
+* Lustre filesystem for parallel file IO
 * Service Accounts for login, controller, and compute nodes
 * IAM policies on a parent folder for system users, administrators, and service accounts (see the [fluid-slurm-gcp module](../../modules/fluid-slurm-gcp/main.tf) for details).
 * Controller and Login Nodes
