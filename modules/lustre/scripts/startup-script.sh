@@ -15,13 +15,13 @@
 # limitations under the License.
 
 # Imported variables from lustre.jinja, do not modify
-CLUSTER_NAME=$(curl "http://metadata.google.internal/computeMetadata/v1/instance/attributes/cluster-name")
-FS_NAME=$(curl "http://metadata.google.internal/computeMetadata/v1/instance/attributes/fs-name")
-NODE_ROLE=$(curl "http://metadata.google.internal/computeMetadata/v1/instance/attributes/node-role")
-HSM_GCS_BUCKET=$(curl "http://metadata.google.internal/computeMetadata/v1/instance/attributes/hsm-gcs")
-HSM_GCS_BUCKET_IMPORT=$(curl "http://metadata.google.internal/computeMetadata/v1/instance/attributes/hsm-gcs-prefix")
-LUSTRE_VERSION=$(curl "http://metadata.google.internal/computeMetadata/v1/instance/attributes/lustre-version")
-E2FS_VERSION=$(curl "http://metadata.google.internal/computeMetadata/v1/instance/attributes/e2fs-version")
+CLUSTER_NAME=$(curl "http://metadata.google.internal/computeMetadata/v1/instance/attributes/cluster-name" -H "Metadata-Flavor: Google")
+FS_NAME=$(curl "http://metadata.google.internal/computeMetadata/v1/instance/attributes/fs-name" -H "Metadata-Flavor: Google")
+NODE_ROLE=$(curl "http://metadata.google.internal/computeMetadata/v1/instance/attributes/node-role" -H "Metadata-Flavor: Google")
+HSM_GCS_BUCKET=$(curl "http://metadata.google.internal/computeMetadata/v1/instance/attributes/hsm-gcs" -H "Metadata-Flavor: Google")
+HSM_GCS_BUCKET_IMPORT=$(curl "http://metadata.google.internal/computeMetadata/v1/instance/attributes/hsm-gcs-prefix" -H "Metadata-Flavor: Google")
+LUSTRE_VERSION=$(curl "http://metadata.google.internal/computeMetadata/v1/instance/attributes/lustre-version" -H "Metadata-Flavor: Google")
+E2FS_VERSION=$(curl "http://metadata.google.internal/computeMetadata/v1/instance/attributes/e2fs-version" -H "Metadata-Flavor: Google")
 
 ost_mount_point="/mnt/ost"
 mdt_mount_point="/mnt/mdt"
@@ -262,12 +262,6 @@ function main() {
 		
 		# Get the hostname index (trailing digit on the hostname) 
 		host_index=`hostname | grep -o -e '[[:digit:]]*' | tail -1`
-		# Decrement the index by 1 to convert to Lustre's indexing
-		if [ ! $host_index ]; then
-			host_index=0
-		else
-			let host_index=host_index-1
-		fi
 
 		# Determine if the OST/MDT disk is PD or Local SSD
         	num_local_ssds=`lsblk | grep -c nvme`
