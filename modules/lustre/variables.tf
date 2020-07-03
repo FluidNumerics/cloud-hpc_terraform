@@ -42,6 +42,12 @@ variable "cluster_name" {
   description = "Name of the Lustre cluster. This name prefixes all compute instances that are created"
 }
 
+variable "fs_name" {
+  type = string
+  default = "lustre"
+  description = "Name of the Lustre filesystem. This name determines the server directory path for mounting"
+}
+
 variable "mds_node_count" {
   type = number
   default = 1

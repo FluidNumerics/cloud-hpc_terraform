@@ -34,7 +34,7 @@ resource "google_compute_instance" "mds" {
   metadata_startup_script = file("${path.module}/scripts/startup-script.sh")
   metadata = {
     cluster-name = var.cluster_name
-    fs-name = var.cluster_name
+    fs-name = var.fs_name
     node-role = "MDS"
     hsm-gcs = var.hsm_gcs_bucket
     hsm-gcs-prefix = var.hsm_gcs_prefix
