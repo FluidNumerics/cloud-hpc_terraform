@@ -125,7 +125,7 @@ locals {
 resource "google_compute_subnetwork" "shared_vpc_subnetworks" {
   count = length(local.regions)
   name = "${local.cluster_name}-${local.regions[count.index]}"
-  ip_cidr_range = cidrsubnet(var.subnet_cidr, 4, count.index+1) 
+  ip_cidr_range = cidrsubnet(var.subnet_cidr, 0, count.index+1)
   region = local.regions[count.index]
   network = google_compute_network.shared_vpc_network.self_link
 }

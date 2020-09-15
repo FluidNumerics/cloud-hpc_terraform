@@ -36,23 +36,23 @@ By default, these settings will use the CentOS-7 v2.4.0 Fluid-Slurm-GCP images f
 ### Changing Image Flavors
 If you want to change the default images used to launch the cluster, you can set the following variables
 ```
-controller_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-controller-centos-v2-4-0"
-compute_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-compute-centos-v2-4-0"
-login_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-login-centos-v2-4-0"
+controller_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-controller-centos-v2-5-0"
+compute_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-compute-centos-v2-5-0"
+login_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-login-centos-v2-5-0"
 ```
 
 For example, you can use our Ubuntu based images
 ```
-controller_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-controller-ubuntu-v2-4-0"
-compute_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-compute-ubuntu-v2-4-0"
-login_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-login-ubuntu-v2-4-0"
+controller_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-controller-ubuntu-v2-5-0"
+compute_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-compute-ubuntu-v2-5-0"
+login_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-login-ubuntu-v2-5-0"
 ```
 
 Or the CentOS-7 + OpenHPC images
 ```
-controller_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-controller-ohpc-v2-4-0"
-compute_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-compute-ohpc-v2-4-0"
-login_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-login-ohpc-v2-4-0"
+controller_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-controller-ohpc-v2-5-0"
+compute_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-compute-ohpc-v2-5-0"
+login_image = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-login-ohpc-v2-5-0"
 ```
 
 Note that you can also use [Packer](https://packer.io) to build on top of these images to retain full functionality of the fluid-slurm-gcp deployment while also including your personal/company applications in the images. Additionally, each `partitions[].machines[]` block can specify a unique compute node image. This is helpful for teams that are building application pipelines that can be distributed across Slurm partitions. 
