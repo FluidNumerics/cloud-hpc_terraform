@@ -28,19 +28,19 @@ variable "tags" {
 variable "controller_image" {
   type = string
   description = "Image to use for the fluid-slurm-gcp controller"
-  default = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-controller-centos-v2-4-0"
+  default = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-controller-centos-v2-5-0"
 }
 
 variable "compute_image" {
   type = string
   description = "Image to use for the fluid-slurm-gcp compute instances (all partitions[].machines[])."
-  default = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-compute-centos-v2-4-0"
+  default = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-compute-centos-v2-5-0"
 }
 
 variable "login_image" {
   type = string
   description = "Image to use for the fluid-slurm-gcp login node"
-  default = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-login-centos-v2-4-0"
+  default = "projects/fluid-cluster-ops/global/images/fluid-slurm-gcp-login-centos-v2-5-0"
 }
 
 variable "controller" { 
