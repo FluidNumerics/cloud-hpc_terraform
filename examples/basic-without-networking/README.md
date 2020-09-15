@@ -1,7 +1,7 @@
 # Fluid-Slurm-GCP : Basic (without networking)
 Copyright 2020 Fluid Numerics LLC
 
-This "Complete System" Terraform deployment creates
+This "Basic System (without networking)" Terraform deployment creates
 * Service Accounts for login, controller, and compute nodes
 * IAM policies on a parent folder for system users, administrators, and service accounts (see the [fluid-slurm-gcp module](../../modules/fluid-slurm-gcp/main.tf) for details).
 * Controller and Login Nodes

@@ -1,7 +1,7 @@
 # Fluid-Slurm-GCP : Complete System with Lustre
 Copyright 2020 Fluid Numerics LLC
 
-This "Complete System" Terraform deployment creates
+This "Complete System (with Lustre)" Terraform deployment creates
 * Shared VPC Network with subnetworks for the controller+login and any regions where partitions are deployed.
 * Firewall rules for open internal communication between compute instances in the fluid-slurm-gcp cluster and for access from the outside world via tcp:22 (ssh)
 * Filestore instance for hosting /home
