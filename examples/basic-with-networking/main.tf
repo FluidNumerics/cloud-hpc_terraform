@@ -121,7 +121,7 @@ locals {
 locals {
   controller = {
     machine_type = var.controller_machine_type
-    disk_size_gb = 15
+    disk_size_gb = 30
     disk_type = "pd-standard"
     labels = {"slurm-gcp"="controller"}
     project = var.primary_project
@@ -131,7 +131,7 @@ locals {
   }
   login = [{
     machine_type = var.login_machine_type
-    disk_size_gb = 15
+    disk_size_gb = 30
     disk_type = "pd-standard"
     labels = {"slurm-gcp"="login"}
     project = var.primary_project
@@ -145,7 +145,7 @@ locals {
                         max_time = "8:00:00"
                         labels = {"slurm-gcp"="compute"}
                         machines = [{ name = "basic"
-                                      disk_size_gb = 15
+                                      disk_size_gb = 30
                                       disk_type = "pd-standard"
                                       disable_hyperthreading = false
                                       external_ip = false
@@ -190,7 +190,6 @@ locals {
                                                                                    static_node_count = m.static_node_count
                                                                                    vpc_subnet = m.vpc_subnet != "" ? m.vpc_subnet : local.zoneToSubnet[m.zone]
                                                                                    zone = m.zone}]}] 
-                                            
 
 
 }
@@ -198,7 +197,7 @@ locals {
 
 // Create the Slurm-GCP cluster
 module "slurm_gcp" {
-  source  = "../../modules/fluid-slurm-gcp"
+  source  = "github.com/fluidnumerics/fluid-slurm-gcp_terraform"
   controller_image = var.controller_image
   compute_image = var.compute_image
   login_image = var.login_image

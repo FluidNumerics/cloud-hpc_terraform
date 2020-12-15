@@ -255,7 +255,7 @@ locals {
 locals {
   controller = {
     machine_type = var.controller_machine_type
-    disk_size_gb = 15
+    disk_size_gb = 30
     disk_type = "pd-standard"
     labels = {"slurm-gcp"="controller"}
     project = var.primary_project
@@ -265,7 +265,7 @@ locals {
   }
   login = [{
     machine_type = var.login_machine_type
-    disk_size_gb = 15
+    disk_size_gb = 30
     disk_type = "pd-standard"
     labels = {"slurm-gcp"="login"}
     project = var.primary_project
@@ -279,7 +279,7 @@ locals {
                         max_time = "8:00:00"
                         labels = {"slurm-gcp"="compute"}
                         machines = [{ name = "basic"
-                                      disk_size_gb = 15
+                                      disk_size_gb = 30
                                       disk_type = "pd-standard"
                                       disable_hyperthreading = false
                                       external_ip = false
